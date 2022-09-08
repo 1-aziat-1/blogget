@@ -7,7 +7,7 @@ function App() {
       <Header />
       <Main />
     </>
-  )
+  );
 }
 
 export default App;
