@@ -44,9 +44,6 @@
       min-height: 150px;
     }
 
-    .linkPost {
-      font-size: 26px;
-    }
     .linkPost:hover {
       color: #cc6633;
     }
@@ -63,11 +60,5 @@
   
     .linkAuthor:hover {
       color: #2d2d2d;
-    }
-  }
-  
-  @media (min-width: 768px) {
-    .linkPost {
-      font-size: 32px;
     }
   }
