@@ -1,12 +1,16 @@
 import React from 'react';
 import style from './Auth.module.css';
 import PropTypes from 'prop-types';
-import {ReactComponent as AuthIcon} from './img/login.svg';
+import {ReactComponent as LoginIcon} from './img/login.svg';
+import {urlAuth} from '../../../api/auth';
+import {Text} from '../../../UI/Text';
 
 export const Auth = ({auth}) => (
   <button className={style.button}>
     {auth ? auth :
-      <AuthIcon className={style.svg}/>
+      <Text As='a' href={urlAuth}>
+        <LoginIcon className={style.svg}/>
+      </Text>
     }
   </button>
 );

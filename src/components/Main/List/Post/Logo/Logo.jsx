@@ -9,7 +9,7 @@ export const Logo = ({title, author}) => (
     <LogoImg title={title}/>
     <div className={style.content}>
       <Text As='h2' className={style.title}>
-        <Text As='a' size='18' tsize={24} className={style.linkPost} href='#post'>
+        <Text As='a' size={18} tsize={24} className={style.linkPost} href='#post'>
           {title}
         </Text>
       </Text>
