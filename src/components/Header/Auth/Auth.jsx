@@ -5,16 +5,16 @@ import {ReactComponent as LoginIcon} from './img/login.svg';
 import {urlAuth} from '../../../api/auth';
 import {Text} from '../../../UI/Text';
 
-export const Auth = ({auth}) => (
-  <button className={style.button}>
-    {auth ? auth :
+export const Auth = ({token}) => (
+  <div className={style.container}>
+    {token ? (token) : (
       <Text As='a' href={urlAuth}>
         <LoginIcon className={style.svg}/>
       </Text>
-    }
-  </button>
+    )}
+  </div>
 );
 
 Auth.propTypes = {
-  auth: PropTypes.bool,
+  token: PropTypes.string,
 };
