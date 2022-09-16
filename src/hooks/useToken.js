@@ -9,7 +9,21 @@ export const useToken = (state) => {
         .get('access_token');
       setToken(token);
     }
+
+    if (localStorage.getItem('bearer')) {
+      setToken(localStorage.getItem('bearer'));
+    }
   }, []);
 
-  return [token];
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('bearer', token);
+    }
+  }, [token]);
+
+  const deltoken = () => {
+    localStorage.removeItem('bearer');
+  };
+
+  return [token, deltoken];
 };
