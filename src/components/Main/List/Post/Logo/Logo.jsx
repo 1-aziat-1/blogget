@@ -4,12 +4,12 @@ import LogoImg from './LogoImg';
 import PropTypes from 'prop-types';
 import {Text} from '../../../../../UI/Text/Text';
 
-export const Logo = ({title, author}) => (
+export const Logo = ({title, author, url, thumbnail}) => (
   <>
-    <LogoImg title={title}/>
+    <LogoImg title={title} thumbnail={thumbnail}/>
     <div className={style.content}>
       <Text As='h2' className={style.title}>
-        <Text As='a' size={18} tsize={24} className={style.linkPost} href='#post'>
+        <Text As='a' size={18} tsize={24} className={style.linkPost} href={url}>
           {title}
         </Text>
       </Text>
@@ -30,4 +30,6 @@ export const Logo = ({title, author}) => (
 Logo.propTypes = {
   title: PropTypes.string,
   author: PropTypes.string,
+  url: PropTypes.string,
+  thumbnail: PropTypes.string,
 };

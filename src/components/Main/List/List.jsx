@@ -1,41 +1,17 @@
-import React from 'react';
+import {useContext} from 'react';
+import {postsContext} from '../../../context/postsContext';
 import style from './List.module.css';
 import Post from './Post';
 
 export const List = () => {
-  const postsData = [
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    },
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    },
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    },
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    }
-  ];
+  const {bestData} = useContext(postsContext);
+
+  const postsData = [];
+  bestData.forEach((item) => postsData.push(item.data));
+
   return (
     <ul className={style.list}>
-      {postsData.map((postData,index) => (<Post key={index} postData={postData}/>))}
+      {postsData.map((postData) => (<Post key={postData.id} postData={postData}/>))}
     </ul>
   );
 };

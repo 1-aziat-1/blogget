@@ -8,8 +8,9 @@ export const Main = () => (
   <main className={style.main}>
     <Layout>
       <Tabs/>
-      <List/>
+      <List />
     </Layout>
   </main>
 );
+
 
