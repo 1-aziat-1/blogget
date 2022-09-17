@@ -2,9 +2,9 @@ import {useEffect, useState} from 'react';
 import {URL_API} from '../api/const';
 import {useToken} from './useToken';
 
-export const useGetBest = () => {
+export const usePostsData = () => {
   const [token] = useToken('');
-  const [bestData, setBestData] = useState([]);
+  const [postsData, setPostsData] = useState([]);
 
   useEffect(() => {
     if (!token) return;
@@ -14,13 +14,18 @@ export const useGetBest = () => {
         Authorization: `bearer ${token}`
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 401) {
+          throw new Error(response.status);
+        }
+        return response.json();
+      })
       .then(({data}) => {
-        setBestData(data.children);
+        setPostsData(data.children);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [token]);
-  return [bestData];
+  return [postsData];
 };

@@ -4,14 +4,10 @@ import style from './List.module.css';
 import Post from './Post';
 
 export const List = () => {
-  const {bestData} = useContext(postsContext);
-
-  const postsData = [];
-  bestData.forEach((item) => postsData.push(item.data));
-
+  const posts = useContext(postsContext);
   return (
     <ul className={style.list}>
-      {postsData.map((postData) => (<Post key={postData.id} postData={postData}/>))}
+      {posts.map(({data}) => (<Post key={data.id} postData={data}/>))}
     </ul>
   );
 };
