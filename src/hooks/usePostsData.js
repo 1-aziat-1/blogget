@@ -1,9 +1,9 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {URL_API} from '../api/const';
-import {useToken} from './useToken';
+import {tokenContext} from '../context/tokenContext';
 
 export const usePostsData = () => {
-  const [token] = useToken('');
+  const {token} = useContext(tokenContext);
   const [postsData, setPostsData] = useState([]);
 
   useEffect(() => {

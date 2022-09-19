@@ -1,19 +1,36 @@
 import React from 'react';
 import style from './Post.module.css';
 import PropTypes from 'prop-types';
-import Logo from './Logo';
+import Content from './Content';
 import Rating from './Rating';
 import Delete from './Delete';
+import Thumbnail from './Thumbnail';
+import Date from './Date';
 
 
 export const Post = ({postData}) => {
-  const {title, author, ups, created, url, thumbnail} = postData;
+  const {
+    id,
+    title,
+    author,
+    ups,
+    created,
+    thumbnail,
+    selftext: markdown,
+  } = postData;
+
 
   return (
     <li className={style.post}>
-      <Logo title={title} author={author} url={url} thumbnail={thumbnail} />
+      <Thumbnail thumbnail={thumbnail} />
+
+      <Content title={title} author={author} markdown={markdown} id={id}/>
+
+      <Rating ups={ups} />
+
+      <Date date={created}/>
+
       <Delete />
-      <Rating ups={ups} date={created}/>
     </li>
   );
 };

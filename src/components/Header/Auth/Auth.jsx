@@ -11,7 +11,6 @@ export const Auth = () => {
   const {deltoken} = useContext(tokenContext);
   const [check, setCheck] = useState(false);
   const {auth, clearAuth} = useContext(authContext);
-
   const getOut = () => {
     setCheck(!check);
   };
