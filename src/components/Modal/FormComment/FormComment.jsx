@@ -1,20 +1,28 @@
-import React, {useContext, useRef} from 'react';
+import {React, useContext} from 'react';
 import style from './FormComment.module.css';
 import {Text} from '../../../UI/Text';
 import {authContext} from '../../../context/authContext';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateComment} from '../../../store';
 
 export const FormComment = () => {
-  const {auth} = useContext(authContext);
-  const textareaRef = useRef(null);
+  const value = useSelector(state => state.comment);
+  const dispath = useDispatch();
 
-  const publishComment = (e) => {
+  const {auth} = useContext(authContext);
+
+
+  const handelSubmit = (e) => {
     e.preventDefault();
-    textareaRef.current.focus();
-    textareaRef.current.value = '';
+    console.log(value);
+  };
+
+  const handleChange = (e) => {
+    dispath(updateComment(e.target.value));
   };
 
   return (
-    <form className={style.form} onSubmit={publishComment}>
+    <form className={style.form} onSubmit={handelSubmit}>
       <Text
         As='h3'
         size={14}
@@ -22,7 +30,12 @@ export const FormComment = () => {
       >
         {auth ? auth.name : 'Имя авторизованнного пользователя'}
       </Text>
-      <textarea className={style.textarea} ref={textareaRef}></textarea>
+      <textarea
+        className={style.textarea}
+        value={value}
+        onChange={handleChange}
+      >
+      </textarea>
       <button className={style.btn} >Отправить</button>
     </form>
   );

@@ -1,10 +1,12 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {URL_API} from '../api/const';
-import {tokenContext} from '../context/tokenContext';
+import {deleteToken} from '../store';
 
 export const useAuth = () => {
+  const token = useSelector(state => state.token);
   const [auth, setAuth] = useState({});
-  const {token, deltoken} = useContext(tokenContext);
+  const dispath = useDispatch();
 
   useEffect(() => {
     if (!token) return;
@@ -16,7 +18,6 @@ export const useAuth = () => {
     })
       .then((response) => {
         if (response.status === 401) {
-          localStorage.setItem('bearer', '');
           throw new Error(response.status);
         }
         return response.json();
@@ -28,7 +29,7 @@ export const useAuth = () => {
       .catch((err) => {
         console.error(err);
         setAuth({});
-        deltoken();
+        dispath(deleteToken(token));
       });
   }, [token]);
 

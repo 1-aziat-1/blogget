@@ -1,9 +1,9 @@
 import {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {URL_API} from '../api/const';
-import {useToken} from './useToken';
 
 export const useCommentsData = (id) => {
-  const [token] = useToken('');
+  const token = useSelector(state => state.token);
   const [post, setPost] = useState({});
   const [commentsData, setCommentsData] = useState({});
 

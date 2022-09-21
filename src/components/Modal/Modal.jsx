@@ -53,9 +53,9 @@ export const Modal = ({id, closeModal}) => {
 
           <p className={style.author}>{author}</p>
 
-            <FormComment/>
+          <FormComment/>
 
-            <Comments commentsData={comments}/>
+          <Comments commentsData={comments}/>
 
 
           <button className={style.close} onClick={closeModal}>
