@@ -26,8 +26,8 @@ export const authLogout = () => ({
 });
 
 
-export const authRequestAsync = () => (dispatch, getSate) => {
-  const token = getSate().token.token;
+export const authRequestAsync = () => (dispatch, getState) => {
+  const token = getState().token.token;
 
   if (!token) return;
   dispatch(authRequest());
