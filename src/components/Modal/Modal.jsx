@@ -7,11 +7,12 @@ import {useEffect, useRef} from 'react';
 import {useCommentsData} from '../../hooks/useCommentsData';
 import FormComment from './FormComment';
 import Comments from './Comments';
+import {Loader} from '../../UI/Loader/Loader';
 
 export const Modal = ({id, closeModal}) => {
   const overlayRef = useRef(null);
 
-  const [{title, author, selftext: markdown}, comments] = useCommentsData(id);
+  const [{title, author, selftext: markdown}, comments, status] = useCommentsData(id);
 
   const handelClick = (e) => {
     const target = e.target;
@@ -34,37 +35,36 @@ export const Modal = ({id, closeModal}) => {
   return ReactDOM.createPortal(
     <div className={style.overlay} ref={overlayRef}>
       <div className={style.modal}>
-        {title ? (
-        <>
-          <h2 className={style.title}>{title}</h2>
-          <div className={style.content}>
-            <Markdown options={{
-              overrides: {
-                a: {
-                  props: {
-                    target: '_blank'
+        {status === 'loading' && <Loader size={50}/>}
+        {status === 'error' && 'ошибка'}
+        {status === 'loaded' && (
+          <>
+            <h2 className={style.title}>{title}</h2>
+            <div className={style.content}>
+              <Markdown options={{
+                overrides: {
+                  a: {
+                    props: {
+                      target: '_blank'
+                    },
                   },
                 },
-              },
-            }}>
-              {markdown}
-            </Markdown>
-          </div>
+              }}>
+                {markdown}
+              </Markdown>
+            </div>
 
-          <p className={style.author}>{author}</p>
+            <p className={style.author}>{author}</p>
 
-          <FormComment/>
+            <FormComment/>
 
-          <Comments commentsData={comments}/>
+            <Comments commentsData={comments}/>
 
-
-          <button className={style.close} onClick={closeModal}>
-            <CloseIcon/>
-          </button>
-        </>
-          ) : (
-          <h2>Загрузка...</h2>
-          )}
+            <button className={style.close} onClick={closeModal}>
+              <CloseIcon/>
+            </button>
+          </>
+        )}
       </div>
     </div>,
     document.getElementById('modal-root'),
