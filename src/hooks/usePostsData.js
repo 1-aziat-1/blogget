@@ -4,7 +4,7 @@ import {postRequestAsync} from '../store/post/postAction';
 
 export const usePostsData = () => {
   const token = useSelector(state => state.token.token);
-  const postsData = useSelector(state => state.post.data);
+  const postsData = useSelector(state => state.post.posts);
   const loading = useSelector(state => state.post.loading);
   const dispatch = useDispatch();
 

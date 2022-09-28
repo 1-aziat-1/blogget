@@ -14,6 +14,7 @@ export const Auth = () => {
   const [check, setCheck] = useState(false);
   const [auth, loading, clearAuth] = useAuth();
   const dispath = useDispatch();
+
   const getOut = () => {
     setCheck(!check);
   };
