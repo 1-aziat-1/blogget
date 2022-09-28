@@ -3,6 +3,7 @@ import {URL_API} from '../../api/const';
 
 export const POST_REQUEST = 'POST_REQUEST';
 export const POST_REQUEST_SUCCESS = 'POST_REQUEST_SUCCESS';
+export const POST_REQUEST_SUCCESS_AFTER = 'POST_REQUEST_SUCCESS_AFTER';
 export const POST_REQUEST_ERROR = 'POST_REQUEST_ERROR';
 
 export const postRequest = () => ({
@@ -10,6 +11,12 @@ export const postRequest = () => ({
 });
 
 export const postRequestSuccess = (data) => ({
+  type: POST_REQUEST_SUCCESS_AFTER,
+  posts: data.children,
+  after: data.after,
+});
+
+export const postRequestSuccessAfter = (data) => ({
   type: POST_REQUEST_SUCCESS,
   posts: data.children,
   after: data.after,
@@ -24,17 +31,23 @@ export const postRequestError = (error) => ({
 export const postRequestAsync = () => (dispatch, getState) => {
   const token = getState().token.token;
   const after = getState().post.after;
+  const loading = getState().post.loading;
+  const isLast = getState().post.isLast;
 
-  if (!token) return;
+  if (!token || loading || isLast) return;
   dispatch(postRequest());
 
-  axios(`${URL_API}/best?limit=10${after ? `after=${after}` : ''}`, {
+  axios(`${URL_API}/best?limit=10&${after ? `after=${after}` : ''}`, {
     headers: {
-      Authorization: `bearer ${token}`
+      Authorization: `bearer ${token}`,
     },
   })
     .then(({data}) => {
-      dispatch(postRequestSuccess(data.data));
+      if (after) {
+        dispatch(postRequestSuccessAfter(data.data));
+      } else {
+        dispatch(postRequestSuccess(data.data));
+      }
     })
     .catch((err) => {
       console.error(err);

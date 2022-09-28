@@ -1,7 +1,8 @@
 import {
   POST_REQUEST,
   POST_REQUEST_ERROR,
-  POST_REQUEST_SUCCESS
+  POST_REQUEST_SUCCESS,
+  POST_REQUEST_SUCCESS_AFTER,
 } from './postAction';
 
 
@@ -10,6 +11,7 @@ const initialState = {
   posts: [],
   error: '',
   after: '',
+  isLast: false,
 };
 
 export const postReducer = (state = initialState, action) => {
@@ -28,6 +30,17 @@ export const postReducer = (state = initialState, action) => {
         posts: action.posts,
         error: '',
         after: action.after,
+        isLast: !action.after,
+      };
+
+    case POST_REQUEST_SUCCESS_AFTER:
+      return {
+        ...state,
+        loading: false,
+        posts: [...state.posts, ...action.posts],
+        error: '',
+        after: action.after,
+        isLast: !action.after,
       };
 
     case POST_REQUEST_ERROR:

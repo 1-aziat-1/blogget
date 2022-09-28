@@ -1,24 +1,18 @@
 import {useEffect, useRef} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {usePostsData} from '../../../hooks/usePostsData';
-import { postRequestAsync } from '../../../store/post/postAction';
+import {useDispatch, useSelector} from 'react-redux';
+import {postRequestAsync} from '../../../store/post/postAction';
 import style from './List.module.css';
 import Post from './Post';
 
 export const List = () => {
-  // const postsData = useSelector(state => state.post.posts);
-  const [postsData] = usePostsData();
-
+  const postsData = useSelector(state => state.post.posts);
   const endList = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!postsData.length) return;
-
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        // dispatch(postRequestAsync());
-        console.log('watch watch');
+        dispatch(postRequestAsync());
       }
     }, {
       rootMargin: '100px',
