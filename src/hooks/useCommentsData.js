@@ -1,19 +1,18 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  commentDataRequestAsync,
-} from '../store/commentData/commentDataAction';
+import {commentsRequestAsync} from '../store/comments/commentsAction';
 
 export const useCommentsData = (id) => {
   const token = useSelector(state => state.token.token);
-  const post = useSelector(state => state.commentData.data);
-  const commentsData = useSelector(state => state.commentData.comment);
-  const status = useSelector(state => state.commentData.status);
+  const post = useSelector(state => state.comments.data);
+  const comments = useSelector(state => state.comments.comment);
+  const status = useSelector(state => state.comments.status);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(commentDataRequestAsync(id));
+    dispatch(commentsRequestAsync(id));
   }, [token]);
 
-  return [post, commentsData, status];
+  return [post, comments, status];
 };

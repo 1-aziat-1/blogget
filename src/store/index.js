@@ -1,23 +1,18 @@
-import {combineReducers, createStore, applyMiddleware} from 'redux';
 import {tokenMiddleware, tokenReducer} from './tokenReducer';
-import thunk from 'redux-thunk';
-import {composeWithDevTools} from '@redux-devtools/extension';
 import {authReducer} from './auth/authReducer';
 import {postReducer} from './post/postReducer';
 import {commentReducer} from './commentReducer';
-import {commentDataReducer} from './commentData/commentDataReducer';
+import commentsReducer from './comments/commentsSlice';
+import {configureStore} from '@reduxjs/toolkit';
 
-
-const rootReducer = combineReducers({
-  token: tokenReducer,
-  comment: commentReducer,
-  auth: authReducer,
-  post: postReducer,
-  commentData: commentDataReducer,
+export const store = configureStore({
+  reducer: {
+    token: tokenReducer,
+    comment: commentReducer,
+    auth: authReducer,
+    post: postReducer,
+    comments: commentsReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(tokenMiddleware),
 });
-
-
-export const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(tokenMiddleware, thunk)),
-);
