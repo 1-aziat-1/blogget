@@ -4,8 +4,8 @@ import {commentsRequestAsync} from '../store/comments/commentsAction';
 
 export const useCommentsData = (id) => {
   const token = useSelector(state => state.token.token);
-  const post = useSelector(state => state.comments.data);
-  const comments = useSelector(state => state.comments.comment);
+  const post = useSelector(state => state.comments.post);
+  const comments = useSelector(state => state.comments.comments);
   const status = useSelector(state => state.comments.status);
 
   const dispatch = useDispatch();
