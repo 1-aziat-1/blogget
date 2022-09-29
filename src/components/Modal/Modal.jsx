@@ -8,18 +8,19 @@ import {useCommentsData} from '../../hooks/useCommentsData';
 import FormComment from './FormComment';
 import Comments from './Comments';
 import {Loader} from '../../UI/Loader/Loader';
+import {useNavigate, useParams} from 'react-router-dom';
 
-export const Modal = ({id, closeModal}) => {
+export const Modal = () => {
+  const {id, page} = useParams();
+  const navigate = useNavigate();
   const overlayRef = useRef(null);
-
   const [{title, author, selftext: markdown}, comments, status] = useCommentsData(id);
-
   const handelClick = (e) => {
     const target = e.target;
 
     if (
       (target === overlayRef.current) || (e.keyCode === 27)) {
-      closeModal();
+      navigate(`/category/${page}`);
     }
   };
 
@@ -60,7 +61,9 @@ export const Modal = ({id, closeModal}) => {
 
             <Comments commentsData={comments}/>
 
-            <button className={style.close} onClick={closeModal}>
+            <button className={style.close} onClick={() => {
+              navigate(`/category/${page}`);
+            }}>
               <CloseIcon/>
             </button>
           </>

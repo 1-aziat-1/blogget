@@ -1,5 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {Outlet, useParams} from 'react-router-dom';
 import {postRequestAsync} from '../../../store/post/postAction';
 import style from './List.module.css';
 import Post from './Post';
@@ -8,6 +9,10 @@ export const List = () => {
   const postsData = useSelector(state => state.post.posts);
   const endList = useRef(null);
   const dispatch = useDispatch();
+  const {page} = useParams();
+  useEffect(() => {
+    dispatch(postRequestAsync(page));
+  }, [page]);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -19,14 +24,23 @@ export const List = () => {
     });
 
     observer.observe(endList.current);
+
+    return () => {
+      if (endList.current) {
+        observer.unobserve(endList.current);
+      }
+    };
   }, [endList.current]);
 
   return (
-    <ul className={style.list}>
-      {
-        postsData.map(({data}) => (<Post key={data.id} postData={data}/>))
-      }
-      <li ref={endList} className={style.end}/>
-    </ul>
+    <>
+      <ul className={style.list}>
+        {
+          postsData.map(({data}) => (<Post key={data.id} postData={data}/>))
+        }
+        <li ref={endList} className={style.end}/>
+      </ul>
+      <Outlet />
+    </>
   );
 };

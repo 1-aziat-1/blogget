@@ -1,0 +1,11 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 25px 15px;
+}
+
+.error {
+  font-size: 25px;
+  color: #cc6633;
+}
