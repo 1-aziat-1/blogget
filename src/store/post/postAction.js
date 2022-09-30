@@ -1,68 +1,69 @@
+import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {URL_API} from '../../api/const';
 
-export const POST_REQUEST = 'POST_REQUEST';
-export const POST_REQUEST_SUCCESS = 'POST_REQUEST_SUCCESS';
-export const POST_REQUEST_SUCCESS_AFTER = 'POST_REQUEST_SUCCESS_AFTER';
-export const POST_REQUEST_ERROR = 'POST_REQUEST_ERROR';
-export const CHANGE_PAGE = 'CHANGE_PAGE';
+// export const postRequestAsync2 = (newPage) => (dispatch, getState) => {
+//   let page = getState().post.page;
 
-export const postRequest = () => ({
-  type: POST_REQUEST,
-});
+//   if (newPage) {
+//     page = newPage;
+//     dispatch(postSlice.actions.changePage({page}));
+//   }
 
-export const postRequestSuccess = (data) => ({
-  type: POST_REQUEST_SUCCESS,
-  posts: data.children,
-  after: data.after,
-});
+//   const token = getState().token.token;
+//   const after = getState().post.after;
+//   const loading = getState().post.loading;
+//   const isLast = getState().post.isLast;
 
-export const postRequestSuccessAfter = (data) => ({
-  type: POST_REQUEST_SUCCESS_AFTER,
-  posts: data.children,
-  after: data.after,
-});
+//   if (!token || loading || isLast) return;
+//   dispatch(postSlice.actions.postRequest());
 
-export const postRequestError = (error) => ({
-  type: POST_REQUEST_ERROR,
-  error,
-});
+//   axios(`${URL_API}/${page}?limit=10&${after ? `after=${after}` : ''}`, {
+//     headers: {
+//       Authorization: `bearer ${token}`,
+//     },
+//   })
+//     .then(({data}) => {
+//       console.log(data.data);
+//       if (after) {
+//         dispatch(postSlice.actions.postRequestSuccessAfter({posts: data.data.children, after: data.data.after}));
+//       } else {
+//         dispatch(postSlice.actions.postRequestSuccess({posts: data.data.children, after: data.data.after}));
+//       }
+//     })
+//     .catch((error) => {
+//       dispatch(postSlice.actions.postRequestError({error}));
+//     });
+// };
 
-export const changePage = (page) => ({
-  type: CHANGE_PAGE,
-  page,
-});
+export const postRequestAsync = createAsyncThunk(
+  'post/fetch',
+  (newPage, {getState}) => {
+    let page = getState().post.page;
+    console.log(page);
+    if (newPage) {
+      page = newPage;
+    }
 
-export const postRequestAsync = (newPage) => (dispatch, getState) => {
-  let page = getState().post.page;
+    const token = getState().token.token;
+    const after = getState().post.after;
+    const isLast = getState().post.isLast;
 
-  if (newPage) {
-    page = newPage;
-    dispatch(changePage(page));
-  }
+    if (!token || isLast) return;
 
-  const token = getState().token.token;
-  const after = getState().post.after;
-  const loading = getState().post.loading;
-  const isLast = getState().post.isLast;
-
-  if (!token || loading || isLast) return;
-  dispatch(postRequest());
-
-  axios(`${URL_API}/${page}?limit=10&${after ? `after=${after}` : ''}`, {
-    headers: {
-      Authorization: `bearer ${token}`,
-    },
-  })
-    .then(({data}) => {
-      if (after) {
-        dispatch(postRequestSuccessAfter(data.data));
-      } else {
-        dispatch(postRequestSuccess(data.data));
-      }
+    return axios(`${URL_API}/${page}?limit=10&${after ? `after=${after}` : ''}`, {
+      headers: {
+        Authorization: `bearer ${token}`,
+      },
     })
-    .catch((err) => {
-      console.error(err);
-      dispatch(postRequestError(err.message));
-    });
-};
+      .then(({data}) => {
+        let postData = data.data.children;
+        if (after) {
+          postData = [...getState().post.posts, ...data.data.children];
+        }
+        console.log(postData);
+        return {posts: postData, after: data.data.after};
+      })
+      .catch((error) => ({error: error.toString()}));
+  }
+);
