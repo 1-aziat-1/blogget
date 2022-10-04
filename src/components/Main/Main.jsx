@@ -8,7 +8,7 @@ import Modal from '../Modal';
 import StartPage from './StartPage';
 import {Error} from './Error/Error';
 
-
+// ready
 export const Main = () => (
   <main className={style.main}>
     <Layout>
