@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {URL_API} from '../../api/const';
@@ -40,7 +41,6 @@ export const postRequestAsync = createAsyncThunk(
   'post/fetch',
   (newPage, {getState}) => {
     let page = getState().post.page;
-    console.log(page);
     if (newPage) {
       page = newPage;
     }
@@ -61,7 +61,6 @@ export const postRequestAsync = createAsyncThunk(
         if (after) {
           postData = [...getState().post.posts, ...data.data.children];
         }
-        console.log(postData);
         return {posts: postData, after: data.data.after};
       })
       .catch((error) => ({error: error.toString()}));

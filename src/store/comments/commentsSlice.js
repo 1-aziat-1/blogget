@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import { commentsRequestAsync } from './commentsAction';
+import {commentsRequestAsync} from './commentsAction';
 
 const initialState = {
   post: {},
