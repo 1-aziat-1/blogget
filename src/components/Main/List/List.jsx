@@ -1,41 +1,49 @@
-import React from 'react';
+import {useEffect, useRef} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Outlet, useParams} from 'react-router-dom';
+import {postRequestAsync} from '../../../store/post/postAction';
+import {postSlice} from '../../../store/post/postSlice';
 import style from './List.module.css';
 import Post from './Post';
 
 export const List = () => {
-  const postsData = [
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    },
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    },
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    },
-    {
-      thumbmail: '',
-      title: 'Title',
-      author: 'Nickname',
-      ups: 24,
-      date: '2022-02-24T00:45:00.000Z',
-    }
-  ];
+  const postsData = useSelector(state => state.post.posts);
+  const endList = useRef(null);
+  const dispatch = useDispatch();
+  const {page} = useParams();
+
+  useEffect(() => {
+    dispatch(postSlice.actions.changePage({page}));
+    dispatch(postRequestAsync(page));
+  }, [page]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        dispatch(postRequestAsync());
+      }
+    }, {
+      rootMargin: '100px',
+    });
+
+    observer.observe(endList.current);
+
+    return () => {
+      if (endList.current) {
+        observer.unobserve(endList.current);
+      }
+    };
+  }, [endList.current]);
+
   return (
-    <ul className={style.list}>
-      {postsData.map((postData,index) => (<Post key={index} postData={postData}/>))}
-    </ul>
+    <>
+      <ul className={style.list}>
+        {
+          postsData.map(({data}) => (<Post key={data.id} postData={data}/>))
+        }
+        <li ref={endList} className={style.end}/>
+      </ul>
+      <Outlet />
+    </>
   );
 };

@@ -1,52 +1,36 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import style from './Auth.module.css';
-import PropTypes from 'prop-types';
 import {ReactComponent as LoginIcon} from './img/login.svg';
 import {urlAuth} from '../../../api/auth';
 import {Text} from '../../../UI/Text';
-import {URL_API} from '../../../api/const';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteToken} from '../../../store/tokenReducer';
+import {useAuth} from '../../../hooks/useAuth';
+import {Loader} from '../../../UI/Loader/Loader';
 
-export const Auth = ({token, deltoken}) => {
-  const [auth, setAuth] = useState({});
+
+export const Auth = () => {
+  const token = useSelector(state => state.token);
   const [check, setCheck] = useState(false);
-  useEffect(() => {
-    if (!token) return;
+  const [auth, loading, clearAuth] = useAuth();
+  const dispath = useDispatch();
 
-    fetch(`${URL_API}/api/v1/me`, {
-      headers: {
-        Authorization: `bearer ${token}`
-      },
-    })
-      .then((response) => {
-        if (response.status === 401) {
-          return localStorage.setItem('bearer', '');
-        }
-        return response.json();
-      })
-      .then(({name, icon_img: iconImg}) => {
-        const img = iconImg.replace(/\?.*$/, '');
-        setAuth({name, img});
-      })
-      .catch((err) => {
-        console.error(err);
-        setAuth({});
-      });
-  }, [token]);
-
-  const handelCahnge = () => {
+  const getOut = () => {
     setCheck(!check);
   };
 
-  const deleteAuth = () => {
-    deltoken();
-    setAuth({});
+  const logOut = () => {
+    dispath(deleteToken(token));
+    clearAuth();
   };
 
   return (
     <div className={style.container}>
-      {auth.name ? (
+      {loading ? (
+        <Loader size={30}/>
+      ) : auth.name ? (
         <>
-          <button className={style.btn} onClick={handelCahnge}>
+          <button className={style.btn} onClick={getOut}>
             <img
               className={style.img}
               src={auth.img}
@@ -54,7 +38,7 @@ export const Auth = ({token, deltoken}) => {
               alt={`Аватар ${auth.name}`}
             />
           </button>
-          {check && <button className={style.logout} onClick={deleteAuth}>{'Выйти'}</button>}
+          {check && <button className={style.logout} onClick={logOut}>{'Выйти'}</button>}
         </>
       ) : (
         <Text className={style.authLink} As='a' href={urlAuth}>
@@ -63,8 +47,4 @@ export const Auth = ({token, deltoken}) => {
       )}
     </div>
   );
-};
-Auth.propTypes = {
-  token: PropTypes.string,
-  deltoken: PropTypes.func,
 };
